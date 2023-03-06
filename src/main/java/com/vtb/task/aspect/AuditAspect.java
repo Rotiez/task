@@ -1,8 +1,9 @@
-package com.vtb.task.validation.aspect;
+package com.vtb.task.aspect;
 
 import com.vtb.task.entity.AuditLog;
 import com.vtb.task.repository.AuditLogRepository;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.ConstraintViolationException;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -13,6 +14,8 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 @Aspect
 @Component
@@ -21,14 +24,14 @@ public class AuditAspect {
     @Autowired
     private AuditLogRepository auditLogRepository;
 
-    @Around("@annotation(com.vtb.task.validation.interfaces.Audit)")
+    @Around("@annotation(com.vtb.task.aspect.Audit)")
     public Object logMethodCall(ProceedingJoinPoint joinPoint) throws Throwable {
         Object response = null;
         String methodName = joinPoint.getSignature().getName();
         String className = joinPoint.getTarget().getClass().getName();
         String httpMethod = "";
         String status = "";
-        String errorMessage = "";
+        Map<String, String> errorMap = new HashMap<>();
 
         // Get HTTP Method
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
@@ -45,9 +48,15 @@ public class AuditAspect {
             status = "Error";
             if (ex instanceof ResponseStatusException) {
                 ResponseStatusException responseStatusException = (ResponseStatusException) ex;
-                errorMessage = responseStatusException.getReason();
-            } else {
-                errorMessage = ex.getMessage();
+                errorMap.put("Message", responseStatusException.getReason());
+            }
+            if(ex instanceof ConstraintViolationException) {
+                ((ConstraintViolationException) ex).getConstraintViolations().stream().toList().forEach( constraintViolation -> {
+                    errorMap.put("Message", constraintViolation.getMessage());
+                });
+
+            }else {
+                errorMap.put("Message", ex.getMessage());
             }
             throw ex;
         } finally {
@@ -57,7 +66,7 @@ public class AuditAspect {
             log.setClassName(className);
             log.setHttpMethod(httpMethod);
             log.setStatus(status);
-            log.setErrorMessage(errorMessage);
+            log.setErrorMessage(errorMap.toString());
             log.setTimestamp(new Date());
             auditLogRepository.save(log);
         }

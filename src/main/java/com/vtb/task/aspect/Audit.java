@@ -1,4 +1,4 @@
-package com.vtb.task.validation.interfaces;
+package com.vtb.task.aspect;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
