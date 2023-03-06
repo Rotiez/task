@@ -1,0 +1,31 @@
+package com.vtb.task.dto.request;
+
+import com.vtb.task.validation.interfaces.ValidateTaskStatus;
+import com.vtb.task.validation.interfaces.ValidateTaskType;
+import jakarta.persistence.Id;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@Builder
+@AllArgsConstructor(staticName = "build")
+@NoArgsConstructor
+public class TaskRequest {
+    @Id
+    private Long taskId;
+    @NotNull(message = "Название задачи не может быть нулевым")
+    @Pattern(regexp = "^[A-Z А-Я].*", message = "Название задачи должно начинаться с заглавной буквы")
+    private String name;
+    @ValidateTaskType(message = "Тип задачи должен быть: Developing или Analytics")
+    private String type;
+    @ValidateTaskStatus(message = "Статус задачи должен быть: In process, Waiting или Closed")
+    private String status;
+    @Pattern(regexp = "^[A-Z А-Я].*", message = "Имя владелеца должено начинаться с заглавной буквы")
+    private String owner;
+    @Pattern(regexp = "^[A-Z А-Я].*", message = "Имя исполнителя должено начинаться с заглавной буквы")
+    private String executor;
+}
