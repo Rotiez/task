@@ -1,6 +1,7 @@
 package com.vtb.task.aspect;
 
 import com.vtb.task.entity.AuditLog;
+import com.vtb.task.exception.UnknownException;
 import com.vtb.task.repository.AuditLogRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
@@ -46,16 +47,22 @@ public class AuditAspect {
             status = "Success";
         } catch (Exception ex) {
             status = "Error";
-            if (ex instanceof ResponseStatusException) {
-                ResponseStatusException responseStatusException = (ResponseStatusException) ex;
+
+            if (ex instanceof ResponseStatusException responseStatusException) {
                 errorMap.put("Message", responseStatusException.getReason());
             }
-            if(ex instanceof ConstraintViolationException) {
+
+            else if(ex instanceof ConstraintViolationException) {
                 ((ConstraintViolationException) ex).getConstraintViolations().stream().toList().forEach( constraintViolation -> {
                     errorMap.put("Message", constraintViolation.getMessage());
                 });
+            }
 
-            }else {
+            else if(ex instanceof UnknownException unknownException){
+                errorMap.put("Message", unknownException.getMessage());
+            }
+
+            else {
                 errorMap.put("Message", ex.getMessage());
             }
             throw ex;

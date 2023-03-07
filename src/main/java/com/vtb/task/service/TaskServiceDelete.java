@@ -1,7 +1,5 @@
 package com.vtb.task.service;
 
-
-import com.vtb.task.entity.Task;
 import com.vtb.task.exception.TaskNotFoundException;
 import com.vtb.task.repository.TaskRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +7,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 
 @Service
 public class TaskServiceDelete {
