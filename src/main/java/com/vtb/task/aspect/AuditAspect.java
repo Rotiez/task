@@ -1,6 +1,7 @@
 package com.vtb.task.aspect;
 
 import com.vtb.task.entity.AuditLog;
+import com.vtb.task.exception.ErrorMessage;
 import com.vtb.task.exception.UnknownException;
 import com.vtb.task.repository.AuditLogRepository;
 import jakarta.servlet.http.HttpServletRequest;
@@ -14,9 +15,8 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Aspect
 @Component
@@ -30,7 +30,7 @@ public class AuditAspect {
         Object response = null;
         String methodName = joinPoint.getSignature().getName();
         String className = joinPoint.getTarget().getClass().getName();
-        String httpMethod = "";
+        String httpMethod = null;
         String status = "";
         Map<String, String> errorMap = new HashMap<>();
 
@@ -53,9 +53,11 @@ public class AuditAspect {
             }
 
             else if(ex instanceof ConstraintViolationException) {
-                ((ConstraintViolationException) ex).getConstraintViolations().stream().toList().forEach( constraintViolation -> {
-                    errorMap.put("Message", constraintViolation.getMessage());
-                });
+                List<ErrorMessage> errorMessageList = ((ConstraintViolationException) ex).getConstraintViolations().stream().map(exception ->
+                        new ErrorMessage("Message", exception.getMessage())).toList();
+                for(int i = 0; i < errorMessageList.size(); i++) {
+                    errorMap.put(errorMessageList.get(i).getError() + "_" + String.valueOf(i), errorMessageList.get(i).getDescription());
+                }
             }
 
             else if(ex instanceof UnknownException unknownException){

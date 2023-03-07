@@ -4,6 +4,7 @@ import com.vtb.task.dto.mapper.TaskMapper;
 import com.vtb.task.dto.request.TaskRequest;
 import com.vtb.task.dto.response.TaskResponse;
 import com.vtb.task.entity.Task;
+import com.vtb.task.exception.UnknownException;
 import com.vtb.task.repository.TaskRepository;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +17,7 @@ public class TaskServiceSave {
     @Autowired
     private TaskRepository repository;
 
-    public TaskResponse saveTask(@Valid TaskRequest taskRequest){
+    public TaskResponse saveTask(@Valid TaskRequest taskRequest) throws UnknownException {
         Task task = TaskMapper.MAPPER.fromRequestToEntity(taskRequest);
         repository.save(task);
         return TaskMapper.MAPPER.fromEntityToResponse(task);

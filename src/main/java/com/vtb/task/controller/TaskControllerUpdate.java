@@ -14,7 +14,7 @@ public class TaskControllerUpdate {
     @Autowired
     private TaskServiceUpdate service;
 
-    @Audit("PUT")
+    @Audit
     @PutMapping("/{id}")
     public ResponseEntity<TaskResponse> updateTask (@RequestBody TaskRequest taskRequest, @PathVariable("id") Long id){
         return ResponseEntity.ok(service.updateTask(taskRequest, id));

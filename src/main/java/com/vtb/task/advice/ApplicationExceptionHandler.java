@@ -16,12 +16,20 @@ import java.util.stream.Collectors;
 @RestControllerAdvice
 public class ApplicationExceptionHandler {
 
+    private final boolean debug = Boolean.parseBoolean(System.getenv("DEBUG_MODE"));
+
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(TaskNotFoundException.class)
     public Map<String, String> handleNotFoundException(TaskNotFoundException ex) {
         Map<String, String> errorMap = new HashMap<>();
-        errorMap.put("errorMessage", ex.getMessage());
-        errorMap.put("status", String.valueOf(HttpStatus.NOT_FOUND));
+        if (debug){
+            errorMap.put("errorMessage", ex.getMessage());
+            errorMap.put("status", String.valueOf(HttpStatus.NOT_FOUND));
+            errorMap.put("StackTrace", Arrays.toString(ex.getStackTrace()));
+        } else{
+            errorMap.put("errorMessage", ex.getMessage());
+            errorMap.put("status", String.valueOf(HttpStatus.NOT_FOUND));
+        }
         return errorMap;
     }
 
@@ -40,7 +48,7 @@ public class ApplicationExceptionHandler {
         return ex.getConstraintViolations().stream()
                 .map(violation -> new ErrorMessage(
                         violation.getPropertyPath().toString(),
-                        violation.getMessage() + " (" + violation.getInvalidValue().toString() + ")"
+                        violation.getMessage() + " (Вы указали: " + violation.getInvalidValue().toString() + ")"
                 )).collect(Collectors.toList());
     }
 

@@ -24,8 +24,8 @@ public class TaskRequest {
     private String type;
     @ValidateTaskStatus(message = "Статус задачи должен быть: In process, Waiting или Closed")
     private String status;
-    @Pattern(regexp = "^[A-Z А-Я].*", message = "Имя владелеца должено начинаться с заглавной буквы")
+    @Pattern(regexp = "^[A-Z А-Я].*", message = "Имя владелеца должно начинаться с заглавной буквы")
     private String owner;
-    @Pattern(regexp = "^[A-Z А-Я].*", message = "Имя исполнителя должено начинаться с заглавной буквы")
+    @Pattern(regexp = "^[A-Z А-Я].*", message = "Имя исполнителя должно начинаться с заглавной буквы")
     private String executor;
 }
