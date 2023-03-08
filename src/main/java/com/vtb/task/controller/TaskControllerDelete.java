@@ -9,20 +9,20 @@ import org.springframework.web.bind.annotation.*;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/tasks")
+@RequestMapping("/tasks/delete")
 public class TaskControllerDelete {
 
     @Autowired
     private TaskServiceDelete service;
 
     @Audit
-    @DeleteMapping("/delete/all")
+    @DeleteMapping("/all")
     public Map<String, String> deleteAllTasks() throws TaskNotFoundException {
         return service.deleteAllTasks();
     }
 
     @Audit
-    @DeleteMapping("delete/id/{id}")
+    @DeleteMapping("/id/{id}")
     public Map<String, String> deleteTaskById (@PathVariable Long id) throws TaskNotFoundException {
         return service.deleteTaskById(id);
     }

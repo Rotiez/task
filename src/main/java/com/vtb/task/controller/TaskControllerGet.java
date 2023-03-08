@@ -15,25 +15,25 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/tasks")
+@RequestMapping("/tasks/get")
 public class TaskControllerGet {
     @Autowired
     private TaskServiceGet service;
 
     @Audit
-    @GetMapping("/get/all")
+    @GetMapping("/all")
     public ResponseEntity<List<Task>> getAllTasks() throws TaskNotFoundException {
         return ResponseEntity.ok(service.getAllTasks());
     }
 
     @Audit
-    @GetMapping("get/id/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<Optional<Task>> getTaskById(@PathVariable Long id) throws TaskNotFoundException {
         return ResponseEntity.ok(service.getTaskById(id));
     }
 
     @Audit
-    @GetMapping("get/name/{name}")
+    @GetMapping("/name/{name}")
     public ResponseEntity<List<Task>> getTaskByName(@PathVariable String name) throws TaskNotFoundException {
         return ResponseEntity.ok(service.getTaskByName(name));
     }
