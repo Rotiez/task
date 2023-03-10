@@ -14,6 +14,9 @@ public class TaskServiceGet {
     @Autowired
     private TaskRepository repository;
 
+    //Обращается к репозиторию для возвращения всех задач
+    //Предварительно проверяется наличие хоть одной задачи,
+    //В противном случае кидается исключение не найденной задачи с сообщением 'нет задач'
     public List<Task> getAllTasks() throws TaskNotFoundException {
 
         if (repository.findAll().isEmpty()){
@@ -23,6 +26,9 @@ public class TaskServiceGet {
         }
     }
 
+    //Обращается к репозиторию для возвращения задачи с определенным 'id'
+    //Предварительно проверяется наличие задачи c данным 'id',
+    //В противном случае кидается исключение не найденной задачи с этим 'id'
     public Optional<Task> getTaskById(Long id) throws TaskNotFoundException {
         if(repository.findById(id).isPresent()){
             return repository.findById(id);
@@ -31,6 +37,9 @@ public class TaskServiceGet {
         }
     }
 
+    //Обращается к репозиторию для возвращения задачи с определенным названием
+    //Предварительно проверяется наличие задачи c данным названием,
+    //В противном случае кидается исключение не найденной задачи с этим названиме
     public List<Task> getTaskByName(String name) throws TaskNotFoundException {
         if(repository.findByName(name).isEmpty()){
             throw new TaskNotFoundException("Задача с name: '" + name + "' не найдена!");

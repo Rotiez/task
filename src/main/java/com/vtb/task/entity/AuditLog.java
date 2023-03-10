@@ -8,6 +8,9 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
 
+
+//Сущность 'AuditLog' с атрибутами 'id', 'Название метода',
+//'Название класса', 'HTTP метод', 'Статус', 'Сообщение об ошибке', 'Время'
 @Entity
 @Table(name = "audit_log")
 @Data

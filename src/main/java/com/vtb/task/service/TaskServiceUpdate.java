@@ -16,6 +16,9 @@ public class TaskServiceUpdate {
     @Autowired
     private TaskRepository repository;
 
+    //Обращается к репозиторию для обновления
+    //Осуществляется валидация атрибутов переданного объекта
+    //Запрос маппится в объект, объект сохраняется, после чего объект мапится в ответ и возвращается
     public TaskResponse updateTask (@Valid TaskRequest taskRequest, Long id){
         Task task = TaskMapper.MAPPER.fromRequestToEntity(taskRequest);
         task.setTaskId(id);

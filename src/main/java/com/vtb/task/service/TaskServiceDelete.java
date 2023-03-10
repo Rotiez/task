@@ -14,6 +14,9 @@ public class TaskServiceDelete {
     @Autowired
     private TaskRepository repository;
 
+    //Обращается к репозиторию для удаления всех задач.
+    //Предварительно проверяется наличие хоть одной задачи,
+    //в противном случае кидается исключение не найденной задачи
     public Map<String, String> deleteAllTasks() throws TaskNotFoundException {
         Map<String, String> response = new HashMap<>();
         if (repository.findAll().isEmpty()){
@@ -25,6 +28,9 @@ public class TaskServiceDelete {
         }
     }
 
+    //Обращается к репозиторию для удаления задачи по 'id'.
+    //Осуществляется проверка наличия задачи c таким 'id',
+    //в случае отсутствия такой задачи, кидается исключение не найденной задачи c данным 'id'
     public Map<String, String> deleteTaskById(Long id) throws TaskNotFoundException {
         Map<String, String> response = new HashMap<>();
         if(repository.findById(id).isPresent()){

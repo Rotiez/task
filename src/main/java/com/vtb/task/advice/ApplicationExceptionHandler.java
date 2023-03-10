@@ -18,6 +18,8 @@ public class ApplicationExceptionHandler {
 
     private final boolean debug = Boolean.parseBoolean(System.getenv("DEBUG_MODE"));
 
+    //Обработчик исключения TaskNotFoundException в случае ошибки при поиске 'задачи'
+    //При переменной среды "DEBUG_MODE=true" выводит StackTrace
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(TaskNotFoundException.class)
     public Map<String, String> handleNotFoundException(TaskNotFoundException ex) {
@@ -33,6 +35,7 @@ public class ApplicationExceptionHandler {
         return errorMap;
     }
 
+    //Обработчик исключения UnknownException
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(UnknownException.class)
     public Map<String, String> handleDefaultException(UnknownException ex) {
@@ -41,7 +44,7 @@ public class ApplicationExceptionHandler {
         return  errorMap;
     }
 
-
+    //Обработчик исключений ConstraintViolationException при ошибке валидации
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ConstraintViolationException.class)
     public List<ErrorMessage> handleConstraintViolationException(ConstraintViolationException ex) {

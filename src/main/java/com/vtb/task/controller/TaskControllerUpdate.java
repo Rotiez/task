@@ -11,9 +11,11 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/tasks/update")
 public class TaskControllerUpdate {
+    //Сервис
     @Autowired
     private TaskServiceUpdate service;
 
+    //Обращение к сервису на обновление 'задачи' при получениии PUT запроса с телом и 'id'
     @Audit
     @PutMapping("/{id}")
     public ResponseEntity<TaskResponse> updateTask (@RequestBody TaskRequest taskRequest, @PathVariable("id") Long id){

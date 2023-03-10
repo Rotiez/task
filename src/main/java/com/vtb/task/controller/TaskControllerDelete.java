@@ -15,12 +15,14 @@ public class TaskControllerDelete {
     @Autowired
     private TaskServiceDelete service;
 
+    //Удаление всех 'задач'
     @Audit
     @DeleteMapping("/all")
     public Map<String, String> deleteAllTasks() throws TaskNotFoundException {
         return service.deleteAllTasks();
     }
 
+    //Удаление 'задач' по их 'id'
     @Audit
     @DeleteMapping("/id/{id}")
     public Map<String, String> deleteTaskById (@PathVariable Long id) throws TaskNotFoundException {

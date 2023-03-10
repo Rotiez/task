@@ -17,6 +17,9 @@ public class TaskServiceSave {
     @Autowired
     private TaskRepository repository;
 
+    //Обращается к репозиторию для сохранения
+    //Осуществляется валидация атрибутов переданного объекта
+    //Запрос маппится в объект, объект сохраняется, после чего объект мапится в ответ и возвращается
     public TaskResponse saveTask(@Valid TaskRequest taskRequest) throws UnknownException {
         Task task = TaskMapper.MAPPER.fromRequestToEntity(taskRequest);
         repository.save(task);

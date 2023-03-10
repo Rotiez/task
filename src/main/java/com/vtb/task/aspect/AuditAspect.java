@@ -34,14 +34,14 @@ public class AuditAspect {
         String status = "";
         Map<String, String> errorMap = new HashMap<>();
 
-        // Get HTTP Method
+        //Получение HTTP Метода из запроса
         ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
         if (attributes != null) {
             HttpServletRequest request = attributes.getRequest();
             httpMethod = request.getMethod();
         }
 
-        // Call method and get response
+        //Отлов исключений и получение errorMessage
         try {
             response = joinPoint.proceed();
             status = "Success";
@@ -69,7 +69,7 @@ public class AuditAspect {
             }
             throw ex;
         } finally {
-            // Save log to database
+            //Сохранение
             AuditLog log = new AuditLog();
             log.setMethodName(methodName);
             log.setClassName(className);

@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class TaskStatusValidation implements ConstraintValidator<ValidateTaskStatus, String> {
+
+    //Валидация статуса задачи на соответствие статусу из списка
     @Override
     public boolean isValid(String taskStatus, ConstraintValidatorContext context) {
         List<String> taskStatuses= Arrays.asList("In process", "Waiting", "Closed");

@@ -8,6 +8,8 @@ import java.util.Arrays;
 import java.util.List;
 
 public class TaskTypeValidation implements ConstraintValidator<ValidateTaskType, String> {
+
+    //Валидация типа задачи на соответствие типу из списка
     @Override
     public boolean isValid(String taskType, ConstraintValidatorContext context) {
         List<String> taskTypes = Arrays.asList("Developing", "Analytics");
