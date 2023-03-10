@@ -1,6 +1,5 @@
 package com.vtb.task.service;
 
-import com.vtb.task.dto.mapper.TaskMapper;
 import com.vtb.task.dto.request.TaskRequest;
 import com.vtb.task.dto.response.TaskResponse;
 import com.vtb.task.entity.Task;

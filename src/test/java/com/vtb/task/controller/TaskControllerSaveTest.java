@@ -1,53 +1,56 @@
 package com.vtb.task.controller;
 
-import com.vtb.task.entity.Task;
-import com.vtb.task.repository.AuditLogRepository;
+import com.vtb.task.dto.request.TaskRequest;
+import com.vtb.task.dto.response.TaskResponse;
+import com.vtb.task.exception.UnknownException;
 import com.vtb.task.service.TaskServiceSave;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.test.web.servlet.MockMvc;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 
-import static org.hamcrest.Matchers.containsInAnyOrder;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
 
-@RunWith(SpringRunner.class)
-@WebMvcTest(value = TaskControllerSave.class)
-class TaskControllerSaveTest {
-    @Autowired
-    private MockMvc mockMvc;
-    @MockBean
-    public TaskServiceSave taskServiceSave;
-    @MockBean
-    public AuditLogRepository auditRepository;
+public class TaskControllerSaveTest {
 
+    @InjectMocks
+    private TaskControllerSave controller;
 
-   /* @Test
-    public void saveTask() throws Exception {
-        Task task = new Task();
+    @Mock
+    private TaskServiceSave service;
 
-        task.setName("Task1");
-        task.setStatus("Waiting");
-        task.setType("Developing");
-        task.setOwner("Mikhail");
-        task.setExecutor("Mikhail");
+    @BeforeEach
+    public void setup() {
+        MockitoAnnotations.initMocks(this);
+    }
 
-        //String json = objectMapper;
+    @Test
+    public void testSaveTaskSuccess() throws UnknownException {
+        TaskRequest request = TaskRequest.builder()
+                .name("Test Task")
+                .type("Type A")
+                .status("New")
+                .owner("John Doe")
+                .executor("Jane Doe")
+                .build();
+        TaskResponse response = TaskResponse.builder()
+                .name("Test Task")
+                .type("Type A")
+                .status("New")
+                .owner("John Doe")
+                .executor("Jane Doe")
+                .build();
 
-        mockMvc.perform(post("/tasks"))
-                .andExpect(status().isCreated())
-                .andExpect(jsonPath("$.id").isNumber())
-                .andExpect(jsonPath("$.name").isString())
-                .andExpect(jsonPath("$.status").isString())
-                .andExpect(jsonPath("$.type").isString())
-                .andExpect(jsonPath("$[*].status", containsInAnyOrder("Waiting", "In process", "Closed")))
-                .andExpect(jsonPath("$[*].status", containsInAnyOrder("Developing", "Analytics")));
-    }*/
+        when(service.saveTask(any(TaskRequest.class))).thenReturn(response);
 
+        ResponseEntity<TaskResponse> result = controller.saveTask(request);
 
+        assertEquals(HttpStatus.OK, result.getStatusCode());
+        assertEquals(response, result.getBody());
+    }
 }

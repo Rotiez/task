@@ -73,7 +73,6 @@ public class TaskServiceGetTest {
         task.setOwner("Owner 1");
         task.setExecutor("Executor 1");
 
-        //Task task = new Task(1L, "Task 1", "Developing", "In process", "Owner 1", "Executor 1");
         when(repository.findById(1L)).thenReturn(Optional.of(task));
 
         Optional<Task> result = service.getTaskById(1L);
