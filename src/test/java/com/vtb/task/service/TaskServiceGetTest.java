@@ -5,6 +5,7 @@ import com.vtb.task.exception.TaskNotFoundException;
 import com.vtb.task.repository.TaskRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.rules.ExpectedException;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -26,6 +27,7 @@ public class TaskServiceGetTest {
     @InjectMocks
     private TaskServiceGet service;
 
+
     @Test
     void testGetAllTasks() throws TaskNotFoundException {
         List<Task> tasks = new ArrayList<>();
@@ -39,7 +41,7 @@ public class TaskServiceGetTest {
         task1.setExecutor("Executor 1");
 
         Task task2 = new Task();
-        task2.setTaskId(1L);
+        task2.setTaskId(2L);
         task2.setName("Task 2");
         task2.setType("Analytics");
         task2.setStatus("Waiting");
@@ -48,6 +50,7 @@ public class TaskServiceGetTest {
 
         tasks.add(task1);
         tasks.add(task2);
+
         when(repository.findAll()).thenReturn(tasks);
 
         List<Task> result = service.getAllTasks();
@@ -57,8 +60,6 @@ public class TaskServiceGetTest {
 
     @Test
     void testGetAllTasksEmptyList() {
-        when(repository.findAll()).thenReturn(new ArrayList<>());
-
         assertThrows(TaskNotFoundException.class, () -> service.getAllTasks());
     }
 
@@ -78,5 +79,47 @@ public class TaskServiceGetTest {
         Optional<Task> result = service.getTaskById(1L);
 
         assertEquals("Task 1", result.get().getName());
+    }
+
+    @Test
+    void testGetTaskByIdEmptyList() {
+        Long id = 999L;
+        assertThrows(TaskNotFoundException.class, () -> service.getTaskById(id));
+    }
+
+
+    @Test
+    void testGetTaskByName() throws TaskNotFoundException {
+
+        List<Task> task = new ArrayList<>();
+        Task task1 = new Task();
+        task1.setTaskId(1L);
+        task1.setName("Task 1");
+        task1.setType("Developing");
+        task1.setStatus("In process");
+        task1.setOwner("Owner 1");
+        task1.setExecutor("Executor 1");
+
+        Task task2 = new Task();
+        task2.setTaskId(2L);
+        task2.setName("Task 2");
+        task2.setType("Analytics");
+        task2.setStatus("Waiting");
+        task2.setOwner("Owner 2");
+        task2.setExecutor("Executor 2");
+
+        task.add(task1);
+        task.add(task2);
+
+        when(repository.findByName("Task 1")).thenReturn(task);
+
+        List<Task> result = service.getTaskByName("Task 1");
+
+        assertEquals(2, result.size());
+    }
+
+    @Test
+    void testGetTaskByNameEmptyList() {
+        assertThrows(TaskNotFoundException.class, () -> service.getTaskByName("First"));
     }
 }

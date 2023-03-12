@@ -87,6 +87,32 @@ public class TaskControllerGetTest {
     }
 
     @Test
+    public void testGetTaskByNameSuccess() throws TaskNotFoundException {
+        List<Task> tasks = new ArrayList<>();
+        Task task = new Task();
+        task.setTaskId(1L);
+        task.setName("Task 1");
+        task.setType("Developing");
+        task.setStatus("In process");
+        task.setOwner("Owner 1");
+        task.setExecutor("Executor 1");
+        tasks.add(task);
+
+        when(service.getTaskByName("Task 1")).thenReturn(tasks);
+
+        ResponseEntity<List<Task>> response = controller.getTaskByName("Task 1");
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(1, response.getBody().size());
+        assertEquals("Task 1", response.getBody().get(0).getName());
+        assertEquals("Developing", response.getBody().get(0).getType());
+        assertEquals("In process", response.getBody().get(0).getStatus());
+        assertEquals("Owner 1", response.getBody().get(0).getOwner());
+        assertEquals("Executor 1", response.getBody().get(0).getExecutor());
+    }
+
+
+    @Test
     public void testGetAllTasksTaskNotFoundException() throws TaskNotFoundException {
         when(service.getAllTasks()).thenThrow(TaskNotFoundException.class);
 

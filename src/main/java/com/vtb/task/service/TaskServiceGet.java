@@ -30,10 +30,10 @@ public class TaskServiceGet {
     //Предварительно проверяется наличие задачи c данным 'id',
     //В противном случае кидается исключение не найденной задачи с этим 'id'
     public Optional<Task> getTaskById(Long id) throws TaskNotFoundException {
-        if(repository.findById(id).isPresent()){
-            return repository.findById(id);
-        }else{
+        if(repository.findById(id).isEmpty()){
             throw new TaskNotFoundException("Задача с id: '" + id + "' не найдена!");
+        }else{
+            return repository.findById(id);
         }
     }
 
