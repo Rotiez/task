@@ -6,8 +6,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-
-//Сущность 'Задача' со своим набором атрибутов
+/**
+ * Сущность задачи с атрибутами
+ * {@link #taskId}, {@link #name}, {@link #type}, {@link #status}, {@link #owner}, {@link #executor}
+ */
 @Entity
 @Table(name = "tasks")
 @Data
