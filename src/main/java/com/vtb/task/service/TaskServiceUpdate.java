@@ -1,28 +1,30 @@
 package com.vtb.task.service;
 
-import com.vtb.task.dto.mapper.TaskMapper;
-import com.vtb.task.dto.request.TaskRequest;
-import com.vtb.task.dto.response.TaskResponse;
 import com.vtb.task.entity.Task;
+import com.vtb.task.exception.TaskNotFoundException;
 import com.vtb.task.repository.TaskRepository;
-import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.validation.annotation.Validated;
 
+/**
+ * Сервис с методом
+ * {@link #updateTask(Task, Long, TaskRepository)}
+ */
 @Service
-@Validated
 public class TaskServiceUpdate {
-    @Autowired
-    private TaskRepository repository;
-
-    //Обращается к репозиторию для обновления
-    //Осуществляется валидация атрибутов переданного объекта
-    //Запрос маппится в объект, объект сохраняется, после чего объект мапится в ответ и возвращается
-    public TaskResponse updateTask (@Valid TaskRequest taskRequest, Long id){
-        Task task = TaskMapper.MAPPER.fromRequestToEntity(taskRequest);
-        task.setTaskId(id);
-        repository.save(task);
-        return TaskMapper.MAPPER.fromEntityToResponse(task);
+    /**
+     * Метод для обновления задачи по ее идентификатору
+     * @param task объект {@link Task}
+     * @param id идентификатор сущности {@link Task}
+     * @param repo репозиторий
+     * @return возвращает объект {@link Task}, которая была обновлена
+     */
+    public Task updateTask (Task task, Long id, TaskRepository repo) throws TaskNotFoundException {
+        if(repo.findById(id).isEmpty()){
+            throw new TaskNotFoundException("Задача с id: '" + id + "' не найдена!");
+        }else{
+            task.setTaskId(id);
+            repo.save(task);
+            return task;
+        }
     }
 }

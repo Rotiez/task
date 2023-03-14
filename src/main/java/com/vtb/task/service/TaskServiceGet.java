@@ -3,48 +3,60 @@ package com.vtb.task.service;
 import com.vtb.task.entity.Task;
 import com.vtb.task.exception.TaskNotFoundException;
 import com.vtb.task.repository.TaskRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
+/**
+ * Сервис c методами
+ * {@link #getAllTasks(TaskRepository)},
+ * {@link #getTaskById(Long, TaskRepository)},
+ * {@link #getTaskByName(String, TaskRepository)}
+ */
 @Service
 public class TaskServiceGet {
-    @Autowired
-    private TaskRepository repository;
 
-    //Обращается к репозиторию для возвращения всех задач
-    //Предварительно проверяется наличие хоть одной задачи,
-    //В противном случае кидается исключение не найденной задачи с сообщением 'нет задач'
-    public List<Task> getAllTasks() throws TaskNotFoundException {
-
-        if (repository.findAll().isEmpty()){
+    /**
+     * Метод для получения списка всех задач
+     * @param repo  репозиторий
+     * @return возвращает список объектов {@link Task}
+     * @throws TaskNotFoundException исключение в случае отсутствия {@link Task} в репозитории
+     */
+    public List<Task> getAllTasks(TaskRepository repo) throws TaskNotFoundException {
+        if (repo.findAll().isEmpty()){
             throw new TaskNotFoundException("Нет задач");
         }else{
-            return repository.findAll();
+            return repo.findAll();
         }
     }
 
-    //Обращается к репозиторию для возвращения задачи с определенным 'id'
-    //Предварительно проверяется наличие задачи c данным 'id',
-    //В противном случае кидается исключение не найденной задачи с этим 'id'
-    public Optional<Task> getTaskById(Long id) throws TaskNotFoundException {
-        if(repository.findById(id).isEmpty()){
+    /**
+     * Метод для получения задачи по ее идентификатору
+     * @param id   идентификатор сущности {@link Task}
+     * @param repo репозиторий
+     * @return возвращает объект {@link Task}
+     * @throws TaskNotFoundException исключение в случае отсутствия {@link Task} в репозитории
+     */
+    public Task getTaskById(Long id, TaskRepository repo) throws TaskNotFoundException {
+        if(repo.findById(id).isEmpty()){
             throw new TaskNotFoundException("Задача с id: '" + id + "' не найдена!");
         }else{
-            return repository.findById(id);
+            return repo.findById(id).orElse(null);
         }
     }
 
-    //Обращается к репозиторию для возвращения задачи с определенным названием
-    //Предварительно проверяется наличие задачи c данным названием,
-    //В противном случае кидается исключение не найденной задачи с этим названиме
-    public List<Task> getTaskByName(String name) throws TaskNotFoundException {
-        if(repository.findByName(name).isEmpty()){
+    /**
+     * Метод для получения задачи по ее названию
+     * @param name название сущности {@link Task}
+     * @param repo репозиторий
+     * @return возвращает список объектов {@link Task}
+     * @throws TaskNotFoundException исключение в случае отсутствия {@link Task} с указанным названием в репозитории
+     */
+    public List<Task> getTaskByName(String name, TaskRepository repo) throws TaskNotFoundException {
+        if(repo.findByName(name).isEmpty()){
             throw new TaskNotFoundException("Задача с name: '" + name + "' не найдена!");
         }else{
-            return repository.findByName(name);
+            return repo.findByName(name);
         }
     }
 }
