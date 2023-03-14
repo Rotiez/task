@@ -1,9 +1,8 @@
 package com.vtb.task.advice;
 
-import com.vtb.task.exception.ErrorMessage;
 import com.vtb.task.exception.UnknownException;
 import com.vtb.task.exception.TaskNotFoundException;
-import jakarta.validation.ConstraintViolationException;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -11,41 +10,76 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
+/**
+ * Обработчик исключений
+ */
 @RestControllerAdvice
 public class ApplicationExceptionHandler {
 
-    private final boolean debug = Boolean.parseBoolean(System.getenv("DEBUG_MODE"));
+    @Value("${debug-mode}")
+    private boolean debug;
 
-    //Обработчик исключения TaskNotFoundException в случае ошибки при поиске 'задачи'
-    //При переменной среды "DEBUG_MODE=true" выводит StackTrace
-    @ResponseStatus(HttpStatus.NOT_FOUND)
-    @ExceptionHandler(TaskNotFoundException.class)
-    public Map<String, String> handleNotFoundException(TaskNotFoundException ex) {
-        Map<String, String> errorMap = new HashMap<>();
+    /**
+     * Метод для добавления в {@link Map}<{@link String}, {@link String}>
+     * StackTrace в случае переменной среды DEBUG_MODE=true
+     * @param errorMap {@link Map}<{@link String}, {@link String}>
+     * @param debug boolean переменная
+     * @param ex exception
+     * @return возвращает {@link Map}<{@link String}, {@link String}>
+     */
+    private Map<String, String> mapAddStackTrace(Map<String, String> errorMap, boolean debug, Exception ex){
         if (debug){
-            errorMap.put("errorMessage", ex.getMessage());
-            errorMap.put("status", String.valueOf(HttpStatus.NOT_FOUND));
             errorMap.put("StackTrace", Arrays.toString(ex.getStackTrace()));
-        } else{
-            errorMap.put("errorMessage", ex.getMessage());
-            errorMap.put("status", String.valueOf(HttpStatus.NOT_FOUND));
         }
         return errorMap;
     }
 
-    //Обработчик исключения UnknownException
+    /**
+     * Метод для обработки исключения {@link TaskNotFoundException}
+     * @param ex exception
+     * @return возвращает результат работы метода {@link #mapAddStackTrace(Map, boolean, Exception)}
+     * ({@link Map}<{@link String}, {@link String}>)
+     */
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    @ExceptionHandler(TaskNotFoundException.class)
+    public Map<String, String> handleNotFoundException(TaskNotFoundException ex) {
+        Map<String, String> errorMap = new HashMap<>();
+        errorMap.put("errorMessage", ex.getMessage());
+        errorMap.put("status", String.valueOf(HttpStatus.NOT_FOUND));
+        return mapAddStackTrace(errorMap, debug, ex);
+    }
+
+    /**
+     * Метод для обработки исключения {@link UnknownException}
+     * @param ex exception
+     * @return возвращает результат работы метода {@link #mapAddStackTrace(Map, boolean, Exception)}
+     * ({@link Map}<{@link String}, {@link String}>)
+     */
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
     @ExceptionHandler(UnknownException.class)
     public Map<String, String> handleDefaultException(UnknownException ex) {
         Map<String, String> errorMap = new HashMap<>();
         errorMap.put("errorMessage", ex.getMessage());
-        return  errorMap;
+        return  mapAddStackTrace(errorMap, debug, ex);
     }
 
-    //Обработчик исключений ConstraintViolationException при ошибке валидации
+    /**
+     * Метод для обработки исключения {@link MethodArgumentNotValidException}
+     * @param ex exception
+     * @return возвращает результат работы метода {@link #mapAddStackTrace(Map, boolean, Exception)}
+     * ({@link Map}<{@link String}, {@link String}>)
+     */
     @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public Map<String,String> handleInvalidArgument(MethodArgumentNotValidException ex) {
+        Map<String, String> errorMap = new HashMap<>();
+        ex.getBindingResult().getFieldErrors().forEach(error -> errorMap.put(error.getField(), error.getDefaultMessage()));
+        errorMap.put("Status", String.valueOf(HttpStatus.BAD_REQUEST));
+        return mapAddStackTrace(errorMap, debug, ex);
+    }
+
+/*    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ConstraintViolationException.class)
     public List<ErrorMessage> handleConstraintViolationException(ConstraintViolationException ex) {
         return ex.getConstraintViolations().stream()
@@ -53,19 +87,5 @@ public class ApplicationExceptionHandler {
                         violation.getPropertyPath().toString(),
                         violation.getMessage() + " (Вы указали: " + violation.getInvalidValue().toString() + ")"
                 )).collect(Collectors.toList());
-    }
-
-/*
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public Map<String,String> handleInvalidArgument(MethodArgumentNotValidException ex) {
-        Map<String, String> errorMap = new HashMap<>();
-        ex.getBindingResult().getFieldErrors().forEach(error -> {
-            errorMap.put(error.getField(), error.getDefaultMessage());
-            errorMap.put("Status", String.valueOf(HttpStatus.BAD_REQUEST));
-        });
-        return (errorMap);
-    }
-    */
-
+    }*/
 }
