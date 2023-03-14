@@ -1,0 +1,36 @@
+DB_URL: ${DB_URL:jdbc:postgresql://localhost:5432/tasks}
+DB_USERNAME: ${DB_USERNAME:postgres}
+DB_PASSWORD: ${DB_PASSWORD:postgres}
+
+spring:
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: ${DB_URL}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  liquibase:
+    enabled: true
+    driver-class-name:
+    url: ${DB_URL}
+    user: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    change-log: classpath:db/changelog/db.changelog-master.yml
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+    show-sql: true
+
+springdoc:
+  swagger-ui:
+    enabled: true
+
+jwt:
+  token:
+    secret: vtbjwtapp
+    expired: 3600000
