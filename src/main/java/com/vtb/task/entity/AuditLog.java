@@ -2,18 +2,22 @@ package com.vtb.task.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.util.Date;
 
-
-//Сущность 'AuditLog' с атрибутами 'id', 'Название метода',
-//'Название класса', 'HTTP метод', 'Статус', 'Сообщение об ошибке', 'Время'
+/**
+ * Сущность адуита с атрибутами
+ * {@link #id}, {@link #methodName}, {@link #className}, {@link #httpMethod}, {@link #status}, {@link #errorMessage}, {@link #timestamp}
+ *
+ */
 @Entity
 @Table(name = "audit_log")
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
