@@ -1,7 +1,7 @@
 databaseChangeLog:
 - changeSet:
     id: 1678661047351-1
-    author: User (generated)
+    author: MKHlebnikov
     changes:
     - createTable:
         columns:
@@ -34,7 +34,7 @@ databaseChangeLog:
         tableName: audit_log
 - changeSet:
     id: 1678661047351-2
-    author: User (generated)
+    author: MKHlebnikov
     changes:
     - createTable:
         columns:

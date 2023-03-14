@@ -1,11 +1,10 @@
-import java.sql.Timestamp
-import java.text.SimpleDateFormat
-
 plugins {
 	id 'java'
 	id 'org.springframework.boot' version '3.0.3'
 	id 'io.spring.dependency-management' version '1.1.0'
+	id "io.freefair.lombok" version "8.0.0-rc2"
 	id 'org.liquibase.gradle' version '2.2.0'
+	//id "org.springdoc.openapi-gradle-plugin" version "1.6.0"
 	id 'jacoco'
 }
 
@@ -33,22 +32,14 @@ dependencies {
 	developmentOnly 'org.springframework.boot:spring-boot-devtools'
 	runtimeOnly 'org.postgresql:postgresql'
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
-	//compileOnly 'javax.servlet:javax.servlet-api:4.0.1'
 	testImplementation 'org.testcontainers:testcontainers:1.17.6'
 
 	// === Security ===
-	implementation 'org.springframework.boot:spring-boot-starter-security'
-	//implementation 'org.springframework.security:spring-security-config:5.3.0.RELEASE'
-	//implementation 'org.springframework.security:spring-security-web:6.0.2'
-	implementation 'org.springframework.security:spring-security-test'
+	//implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
 
 	// === Swagger ===
 	implementation 'org.springdoc:springdoc-openapi-ui:1.6.14'
-	//implementation 'io.springfox:springfox-swagger-ui:3.0.0'
-
-	// === Lombok ===
-	compileOnly 'org.projectlombok:lombok'
-	annotationProcessor 'org.projectlombok:lombok'
 
 	// === Mapstruct ===
 	implementation 'org.mapstruct:mapstruct:1.5.3.Final'
@@ -61,33 +52,6 @@ dependencies {
 
 	// === Liquibase ===
 	implementation 'org.liquibase:liquibase-core'
-		liquibaseRuntime 'org.liquibase:liquibase-core:3.8.9'
-		liquibaseRuntime("ch.qos.logback:logback-core:1.2.3")
-		liquibaseRuntime("ch.qos.logback:logback-classic:1.2.3")
-		//драйвер БД
-		liquibaseRuntime 'org.postgresql:postgresql'
-		//hibernate & spring & jpa
-		liquibaseRuntime 'org.liquibase.ext:liquibase-hibernate5:3.6'
-		liquibaseRuntime 'org.springframework.data:spring-data-jpa'
-		liquibaseRuntime 'org.springframework.boot:spring-boot'
-		liquibaseRuntime sourceSets.main.output
-		//для записи в yaml
-		liquibaseRuntime 'org.yaml:snakeyaml:1.26'
-}
-
-
-liquibase {
-	activities {
-		mainlist {
-			//changeLogFile "$buildDir/generated-migration.yaml"
-			changeLogFile "src/main/resources/db/changelog/changesets/generated-changelog-1.yaml"
-			url "jdbc:postgresql://localhost:5432/tasks"
-			username "postgres"
-			password "postgres"
-			referenceUrl 'hibernate:spring:com.vtb.task.entity?dialect=org.hibernate.dialect.PostgreSQL10Dialect&hibernate.physical_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy&hibernate.implicit_naming_strategy=org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy'
-		}
-		runList = "mainlist"
-	}
 }
 
 test {
