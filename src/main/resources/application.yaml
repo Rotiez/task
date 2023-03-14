@@ -1,25 +1,27 @@
-DB_URL: ${DB_URL:jdbc:postgresql://localhost:5432/tasks}
-DB_USERNAME: ${DB_USERNAME:postgres}
-DB_PASSWORD: ${DB_PASSWORD:postgres}
+db-url: ${DB_URL:jdbc:postgresql://localhost:5432/tasks}
+db-username: ${DB_USERNAME:postgres}
+db-password: ${DB_PASSWORD:postgres}
+debug-mode: ${DEBUG_MODE:true}
+
 
 spring:
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: ${DB_URL}
-    username: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    url: ${db-url}
+    username: ${db-username}
+    password:  ${db-password}
 
   liquibase:
-    enabled: true
-    driver-class-name:
-    url: ${DB_URL}
-    user: ${DB_USERNAME}
-    password: ${DB_PASSWORD}
+    enabled: false
+    driver-class-name: org.postgresql.Driver
+    url: ${db-url}
+    user: ${db-username}
+    password: ${db-password}
     change-log: classpath:db/changelog/db.changelog-master.yml
 
   jpa:
     hibernate:
-      ddl-auto: validate
+      ddl-auto: create-drop
     properties:
       hibernate:
         dialect: org.hibernate.dialect.PostgreSQLDialect
