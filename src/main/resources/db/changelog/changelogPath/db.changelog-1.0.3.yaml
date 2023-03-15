@@ -1,0 +1,65 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1.0.3
+      author: MKHlebnikov
+      changes:
+        - createTable:
+            tableName: users
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: users_pkey
+                  name: id
+                  type: BIGSERIAL
+
+              - column:
+                  constraints:
+                    nullable: false
+                    unique: true
+                  name: username
+                  type: VARCHAR(255)
+
+              - column:
+                  constraints:
+                    nullable: false
+                    unique: true
+                  name: email
+                  type: VARCHAR(255)
+
+              - column:
+                  name: first_name
+                  type: VARCHAR(255)
+
+              - column:
+                  name: last_name
+                  type: VARCHAR(255)
+
+              - column:
+                  constraints:
+                    nullable: false
+                  name: password
+                  type: VARCHAR(255)
+
+              - column:
+                  constraints:
+                    nullable: false
+                  name: status
+                  type: VARCHAR(25)
+                  defaultValue: ACTIVE
+
+              - column:
+                  constraints:
+                    nullable: false
+                  name: created
+                  type: TIMESTAMP
+                  defaultValue: ${now}
+
+              - column:
+                  constraints:
+                    nullable: false
+                  name: updated
+                  type: TIMESTAMP
+                  defaultValue: ${now}

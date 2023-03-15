@@ -1,0 +1,57 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1.0.4.0
+      author: MKHlebnikov
+      changes:
+        - createTable:
+            tableName: user_roles
+            columns:
+              - column:
+                  name: user_id
+                  type: BIGSERIAL
+              - column:
+                  name: role_id
+                  type: BIGSERIAL
+
+  - changeSet:
+      id: 1.0.4.1
+      author: MKHlebnikov
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: user_id
+            baseTableName: user_roles
+            constraintName: fk_user_roles_user
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: users
+
+  - changeSet:
+      id: 1.0.4.2
+      author: MKHlebnikov
+      changes:
+        - addForeignKeyConstraint:
+            baseColumnNames: role_id
+            baseTableName: user_roles
+            constraintName: fk_user_roles_roles
+            onDelete: CASCADE
+            onUpdate: RESTRICT
+            referencedColumnNames: id
+            referencedTableName: roles
+
+  - changeSet:
+      id: 1.0.4.3
+      author: MKHlebnikov
+      changes:
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: name
+                  value: ROLE_USER
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: name
+                  value: ROLE_ADMIN

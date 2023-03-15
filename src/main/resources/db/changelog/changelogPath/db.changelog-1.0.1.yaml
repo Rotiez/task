@@ -1,0 +1,31 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1.0.1
+      author: MKHlebnikov
+      changes:
+        - createTable:
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: tasks_pkey
+                  name: task_id
+                  type: BIGSERIAL
+              - column:
+                  name: executor
+                  type: VARCHAR(255)
+              - column:
+                  name: name
+                  type: VARCHAR(255)
+              - column:
+                  name: owner
+                  type: VARCHAR(255)
+              - column:
+                  name: status
+                  type: VARCHAR(255)
+              - column:
+                  name: type
+                  type: VARCHAR(255)
+            tableName: tasks

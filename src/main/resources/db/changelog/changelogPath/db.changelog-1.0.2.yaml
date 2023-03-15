@@ -1,0 +1,44 @@
+databaseChangeLog:
+  - changeSet:
+      id: 1.0.2
+      author: MKHlebnikov
+      changes:
+        - createTable:
+            tableName: roles
+            columns:
+              - column:
+                  autoIncrement: true
+                  constraints:
+                    nullable: false
+                    primaryKey: true
+                    primaryKeyName: roles_pkey
+                  name: id
+                  type: BIGSERIAL
+
+              - column:
+                  constraints:
+                    nullable: false
+                    unique: true
+                  name: name
+                  type: VARCHAR(100)
+
+              - column:
+                  constraints:
+                    nullable: false
+                  name: status
+                  type: VARCHAR(25)
+                  defaultValue: ACTIVE
+
+              - column:
+                  constraints:
+                    nullable: false
+                  name: created
+                  type: TIMESTAMP
+                  defaultValue: ${now}
+
+              - column:
+                  constraints:
+                    nullable: false
+                  name: updated
+                  type: TIMESTAMP
+                  defaultValue: ${now}

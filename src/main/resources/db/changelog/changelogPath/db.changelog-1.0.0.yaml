@@ -1,6 +1,6 @@
 databaseChangeLog:
 - changeSet:
-    id: 1678661047351-1
+    id: 1.0.0
     author: MKHlebnikov
     changes:
     - createTable:
@@ -32,34 +32,5 @@ databaseChangeLog:
             name: timestamp
             type: TIMESTAMP WITHOUT TIME ZONE
         tableName: audit_log
-- changeSet:
-    id: 1678661047351-2
-    author: MKHlebnikov
-    changes:
-    - createTable:
-        columns:
-        - column:
-            autoIncrement: true
-            constraints:
-              nullable: false
-              primaryKey: true
-              primaryKeyName: tasks_pkey
-            name: task_id
-            type: BIGSERIAL
-        - column:
-            name: executor
-            type: VARCHAR(255)
-        - column:
-            name: name
-            type: VARCHAR(255)
-        - column:
-            name: owner
-            type: VARCHAR(255)
-        - column:
-            name: status
-            type: VARCHAR(255)
-        - column:
-            name: type
-            type: VARCHAR(255)
-        tableName: tasks
+
 
