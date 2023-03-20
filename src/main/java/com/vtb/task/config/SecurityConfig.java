@@ -27,7 +27,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/auth/**").permitAll()
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("api/tasks/delete/**").hasAuthority("ROLE_ADMIN")
+                .requestMatchers("/api/tasks/delete/**").hasRole("ADMIN")
                 .anyRequest().authenticated()
                 .and()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
