@@ -13,7 +13,7 @@ databaseChangeLog:
                     primaryKey: true
                     primaryKeyName: users_pkey
                   name: id
-                  type: BIGSERIAL
+                  type: BIGINT
 
               - column:
                   constraints:
@@ -45,21 +45,21 @@ databaseChangeLog:
 
               - column:
                   constraints:
-                    nullable: false
+                    nullable: true
                   name: status
                   type: VARCHAR(25)
                   defaultValue: ACTIVE
 
               - column:
                   constraints:
-                    nullable: false
+                    nullable: true
                   name: created
                   type: TIMESTAMP
                   defaultValue: ${now}
 
               - column:
                   constraints:
-                    nullable: false
+                    nullable: true
                   name: updated
                   type: TIMESTAMP
                   defaultValue: ${now}

@@ -9,6 +9,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Ответ для задачи с атрибутами
+ * {@link #name}, {@link #type}, {@link #status}, {@link #owner}, {@link #executor},
+ */
 @Data
 @Builder
 @AllArgsConstructor(staticName = "build")

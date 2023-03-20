@@ -1,5 +1,6 @@
 package com.vtb.task.advice;
 
+import com.vtb.task.exception.AuthException;
 import com.vtb.task.exception.UnknownException;
 import com.vtb.task.exception.TaskNotFoundException;
 import org.springframework.beans.factory.annotation.Value;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.sql.SQLException;
 import java.util.*;
 
 /**
@@ -76,6 +78,21 @@ public class ApplicationExceptionHandler {
         Map<String, String> errorMap = new HashMap<>();
         ex.getBindingResult().getFieldErrors().forEach(error -> errorMap.put(error.getField(), error.getDefaultMessage()));
         errorMap.put("Status", String.valueOf(HttpStatus.BAD_REQUEST));
+        return mapAddStackTrace(errorMap, debug, ex);
+    }
+
+    /**
+     * Метод для обработки исключения {@link AuthException}
+     * @param ex exception
+     * @return возвращает результат работы метода {@link #mapAddStackTrace(Map, boolean, Exception)}
+     * ({@link Map}<{@link String}, {@link String}>)
+     */
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(SQLException.class)
+    public Map<String,String> handleAuthException(SQLException ex) {
+        Map<String, String> errorMap = new HashMap<>();
+        errorMap.put("errorMessage", ex.getMessage());
+        errorMap.put("status", String.valueOf(HttpStatus.BAD_REQUEST));
         return mapAddStackTrace(errorMap, debug, ex);
     }
 

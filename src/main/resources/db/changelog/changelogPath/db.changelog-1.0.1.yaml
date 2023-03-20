@@ -12,7 +12,7 @@ databaseChangeLog:
                     primaryKey: true
                     primaryKeyName: tasks_pkey
                   name: task_id
-                  type: BIGSERIAL
+                  type: BIGINT
               - column:
                   name: executor
                   type: VARCHAR(255)

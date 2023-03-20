@@ -9,6 +9,7 @@ import com.vtb.task.service.TaskServiceFacade;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,7 @@ import java.util.Map;
  * Контроллер, передающий валидные запросы на {@link TaskServiceFacade}
  */
 @RestController
-@RequestMapping("/tasks")
+@RequestMapping("/api/tasks")
 @AllArgsConstructor
 @Validated
 public class TaskController {
@@ -91,6 +92,7 @@ public class TaskController {
      */
     @Audit
     @PostMapping("/save")
+    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<TaskResponse> saveTask(@Valid @RequestBody TaskRequest taskRequest) {
         return ResponseEntity.ok(service.saveTask(taskRequest));
     }

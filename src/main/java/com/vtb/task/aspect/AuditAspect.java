@@ -6,10 +6,10 @@ import com.vtb.task.exception.UnknownException;
 import com.vtb.task.repository.AuditLogRepository;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
+import lombok.RequiredArgsConstructor;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -22,14 +22,20 @@ import java.util.Map;
 
 @Aspect
 @Component
+@RequiredArgsConstructor
 public class AuditAspect {
 
-    @Autowired
-    private AuditLogRepository auditLogRepository;
+    private final AuditLogRepository auditLogRepository;
 
+    /**
+     * Метод для создания объекта {@link AuditLog} и сохранения его в репозиторий
+     * @param joinPoint
+     * @return возвращает {@link Object} response
+     * @throws Throwable
+     */
     @Around("@annotation(com.vtb.task.aspect.Audit)")
     public Object logMethodCall(ProceedingJoinPoint joinPoint) throws Throwable {
-        Object response = null;
+        Object response;
         String methodName = joinPoint.getSignature().getName();
         String className = joinPoint.getTarget().getClass().getName();
         String httpMethod = null;
@@ -58,7 +64,7 @@ public class AuditAspect {
                 List<ErrorMessage> errorMessageList = ((ConstraintViolationException) ex).getConstraintViolations().stream().map(exception ->
                         new ErrorMessage("Message", exception.getMessage())).toList();
                 for(int i = 0; i < errorMessageList.size(); i++) {
-                    errorMap.put(errorMessageList.get(i).getError() + "_" + String.valueOf(i), errorMessageList.get(i).getDescription());
+                    errorMap.put(errorMessageList.get(i).getError() + "_" + i, errorMessageList.get(i).getDescription());
                 }
             }
 
@@ -70,6 +76,7 @@ public class AuditAspect {
                 errorMap.put("Message", ex.getMessage());
             }
             throw ex;
+
         } finally {
             //Сохранение
             AuditLog log = new AuditLog();

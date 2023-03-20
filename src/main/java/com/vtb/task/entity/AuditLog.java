@@ -10,7 +10,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import java.util.Date;
 
 /**
- * Сущность адуита с атрибутами
+ * Сущность аудита с атрибутами
  * {@link #id}, {@link #methodName}, {@link #className}, {@link #httpMethod}, {@link #status}, {@link #errorMessage}, {@link #timestamp}
  *
  */

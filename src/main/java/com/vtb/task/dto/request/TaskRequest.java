@@ -10,6 +10,10 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Запрос для задачи с атрибутами
+ * {@link #taskId}, {@link #name}, {@link #type}, {@link #status}, {@link #owner}, {@link #executor},
+ */
 @Data
 @Builder
 @AllArgsConstructor(staticName = "build")

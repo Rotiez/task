@@ -4,12 +4,14 @@ import com.vtb.task.entity.Task;
 import com.vtb.task.exception.TaskNotFoundException;
 import com.vtb.task.repository.TaskRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Сервис с методом
  * {@link #updateTask(Task, Long, TaskRepository)}
  */
 @Service
+@Transactional
 public class TaskServiceUpdate {
     /**
      * Метод для обновления задачи по ее идентификатору

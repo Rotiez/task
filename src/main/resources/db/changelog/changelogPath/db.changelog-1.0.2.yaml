@@ -13,7 +13,7 @@ databaseChangeLog:
                     primaryKey: true
                     primaryKeyName: roles_pkey
                   name: id
-                  type: BIGSERIAL
+                  type: BIGINT
 
               - column:
                   constraints:

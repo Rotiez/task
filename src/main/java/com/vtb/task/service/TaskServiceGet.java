@@ -4,6 +4,7 @@ import com.vtb.task.entity.Task;
 import com.vtb.task.exception.TaskNotFoundException;
 import com.vtb.task.repository.TaskRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -14,6 +15,7 @@ import java.util.List;
  * {@link #getTaskByName(String, TaskRepository)}
  */
 @Service
+@Transactional
 public class TaskServiceGet {
 
     /**

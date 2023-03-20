@@ -23,4 +23,8 @@ public class BaseEntity {
     @LastModifiedDate
     @Column(name = "updated")
     private Date updated;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "status")
+    private Status status;
 }

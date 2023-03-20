@@ -12,7 +12,7 @@ databaseChangeLog:
               primaryKey: true
               primaryKeyName: audit_log_pkey
             name: id
-            type: BIGSERIAL
+            type: BIGINT
         - column:
             name: class_name
             type: VARCHAR(255)

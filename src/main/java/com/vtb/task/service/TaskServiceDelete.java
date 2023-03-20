@@ -4,6 +4,7 @@ import com.vtb.task.entity.Task;
 import com.vtb.task.exception.TaskNotFoundException;
 import com.vtb.task.repository.TaskRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -14,6 +15,7 @@ import java.util.Map;
  * {@link  #deleteTaskById(Long, TaskRepository)}
  */
 @Service
+@Transactional
 public class TaskServiceDelete {
     /**
      * Метод для удаления всех задач

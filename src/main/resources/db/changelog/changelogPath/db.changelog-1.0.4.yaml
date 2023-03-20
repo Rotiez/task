@@ -8,10 +8,10 @@ databaseChangeLog:
             columns:
               - column:
                   name: user_id
-                  type: BIGSERIAL
+                  type: BIGINT
               - column:
                   name: role_id
-                  type: BIGSERIAL
+                  type: BIGINT
 
   - changeSet:
       id: 1.0.4.1
