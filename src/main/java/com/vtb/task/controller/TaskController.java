@@ -9,7 +9,6 @@ import com.vtb.task.service.TaskServiceFacade;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -30,7 +29,7 @@ public class TaskController {
 //====================================================================================================================
 
     /**
-     * @return возвращает возвращает {@link Map} с {@link String} ключом и {@link String} значением
+     * @return возвращает {@link Map} с {@link String} ключом и {@link String} значением
      * @throws TaskNotFoundException исключение в случае отсутствия {@link Task} в репозитории
      */
     @Audit
@@ -41,7 +40,7 @@ public class TaskController {
 
     /**
      * @param id идентификатор задачи
-     * @return возвращает возвращает {@link Map} с {@link String} ключом и {@link String} значением
+     * @return возвращает {@link Map} с {@link String} ключом и {@link String} значением
      * @throws TaskNotFoundException исключение в случае отсутствия {@link Task} в репозитории
      */
     @Audit
@@ -92,7 +91,6 @@ public class TaskController {
      */
     @Audit
     @PostMapping("/save")
-    @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<TaskResponse> saveTask(@Valid @RequestBody TaskRequest taskRequest) {
         return ResponseEntity.ok(service.saveTask(taskRequest));
     }

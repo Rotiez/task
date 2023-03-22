@@ -12,6 +12,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+
+/**
+ * Контроллер, для запросов на регитсрацию и аутентификацию
+ */
 @RestController
 @RequestMapping("/api/auth")
 @RequiredArgsConstructor
@@ -19,14 +23,23 @@ public class AuthenticationController {
 
     private final AuthenticationService service;
 
+
+    /**
+     * @param request объект класса {@link RegisterRequest}
+     * @return {@link ResponseEntity<AuthenticationResponse>}
+     */
     @Audit
     @PostMapping("/register")
     public ResponseEntity<AuthenticationResponse> register (@RequestBody RegisterRequest request) {
         return ResponseEntity.ok(service.register(request));
     }
 
+    /**
+     * @param request объект класса {@link AuthenticationRequest}
+     * @return {@link ResponseEntity<AuthenticationResponse>}
+     */
     @Audit
-    @PostMapping("/authenticate")
+    @PostMapping("/login")
     public ResponseEntity<AuthenticationResponse> authenticate (@RequestBody AuthenticationRequest request) {
         return ResponseEntity.ok(service.authenticate(request));
     }

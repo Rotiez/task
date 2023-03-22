@@ -3,6 +3,11 @@ db-username: ${DB_USERNAME:postgres}
 db-password: ${DB_PASSWORD:postgres}
 debug-mode: ${DEBUG_MODE:false}
 
+jwt:
+  token:
+    secret: 4E645267556A586E3272357538782F413F4428472B4B6250655368566D597133
+    expired: 3600000
+
 
 spring:
   datasource:
@@ -32,8 +37,3 @@ springdoc:
   swagger-ui:
     enabled: true
     path: /swagger-ui.html
-
-jwt:
-  token:
-    secret: 4E645267556A586E3272357538782F413F4428472B4B6250655368566D597133
-    expired: 3600000

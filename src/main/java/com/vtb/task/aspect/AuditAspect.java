@@ -27,12 +27,6 @@ public class AuditAspect {
 
     private final AuditLogRepository auditLogRepository;
 
-    /**
-     * Метод для создания объекта {@link AuditLog} и сохранения его в репозиторий
-     * @param joinPoint
-     * @return возвращает {@link Object} response
-     * @throws Throwable
-     */
     @Around("@annotation(com.vtb.task.aspect.Audit)")
     public Object logMethodCall(ProceedingJoinPoint joinPoint) throws Throwable {
         Object response;

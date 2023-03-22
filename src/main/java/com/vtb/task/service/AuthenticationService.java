@@ -5,6 +5,7 @@ import com.vtb.task.dto.request.AuthenticationRequest;
 import com.vtb.task.dto.request.RegisterRequest;
 import com.vtb.task.dto.response.AuthenticationResponse;
 import com.vtb.task.entity.Role;
+import com.vtb.task.entity.Status;
 import com.vtb.task.entity.User;
 import com.vtb.task.repository.RoleRepository;
 import com.vtb.task.repository.UserRepository;
@@ -16,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -40,6 +42,10 @@ public class AuthenticationService {
                 .password(passwordEncoder.encode(request.getPassword()))
                 .roles(defaultRoles)
                 .build();
+        user.setStatus(Status.ACTIVE);
+        user.setCreated(new Date(System.currentTimeMillis()));
+        user.setUpdated(new Date(System.currentTimeMillis()));
+        user.setLastLogin(new Date(System.currentTimeMillis()));
         userRepository.save(user);
         var jwtToken = jwtService.generateToken(user);
         return AuthenticationResponse.builder()
@@ -57,6 +63,7 @@ public class AuthenticationService {
         var user = userRepository.findByUsername(request.getUsername())
                 .orElseThrow();
         var jwtToken = jwtService.generateToken(user);
+        user.setLastLogin(new Date(System.currentTimeMillis()));
         return AuthenticationResponse.builder()
                 .token(jwtToken)
                 .build();

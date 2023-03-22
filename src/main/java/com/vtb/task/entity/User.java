@@ -11,6 +11,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,23 +21,22 @@ import java.util.stream.Collectors;
  *  наследуется от {@link BaseEntity}
  */
 @Entity
-@Table (name = "users")
+@Table (name = "users", uniqueConstraints = @UniqueConstraint(columnNames = {"email", "username"}))
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class User extends BaseEntity implements UserDetails {
-    @Column(name = "username")
     private String username;
     @Column(name = "first_name")
     private String firstName;
     @Column(name = "last_name")
     private String lastName;
-    @Column(name = "email")
     @Email
     private String email;
-    @Column(name = "password")
     private String password;
+    @Column(name = "last_login")
+    private Date lastLogin;
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_roles",
         joinColumns = {@JoinColumn(name = "user_id", referencedColumnName = "id")},

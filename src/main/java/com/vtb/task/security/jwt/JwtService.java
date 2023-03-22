@@ -17,7 +17,10 @@ import java.util.function.Function;
 
 @Service
 public class JwtService {
-    private static final String SECRET_KEY = "4E645267556A586E3272357538782F413F4428472B4B6250655368566D597133";
+    @Value("${jwt.token.secret}")
+    private static String SECRET_KEY = "4E645267556A586E3272357538782F413F4428472B4B6250655368566D597133";
+    @Value("${jwt.token.expired}")
+    private int expirationTime = 3600000;
 
 
     public String extractUsername(String token) {
@@ -29,7 +32,6 @@ public class JwtService {
     }
 
     public String generateToken (Map<String, Object> extraClaims, UserDetails userDetails) {
-        int expirationTime = 3600000;
         return Jwts.builder()
                 .setClaims(extraClaims)
                 .setSubject(userDetails.getUsername())

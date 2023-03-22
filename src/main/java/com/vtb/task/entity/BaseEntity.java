@@ -1,7 +1,9 @@
 package com.vtb.task.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Data;
+import org.springframework.boot.context.properties.bind.DefaultValue;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 

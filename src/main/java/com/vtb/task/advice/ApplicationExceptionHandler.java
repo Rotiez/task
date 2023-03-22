@@ -1,8 +1,9 @@
 package com.vtb.task.advice;
 
-import com.vtb.task.exception.AuthException;
-import com.vtb.task.exception.UnknownException;
+import com.vtb.task.exception.ErrorMessage;
 import com.vtb.task.exception.TaskNotFoundException;
+import com.vtb.task.exception.UnknownException;
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -11,7 +12,11 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import java.sql.SQLException;
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 /**
  * Обработчик исключений
@@ -82,7 +87,7 @@ public class ApplicationExceptionHandler {
     }
 
     /**
-     * Метод для обработки исключения {@link AuthException}
+     * Метод для обработки исключения {@link SQLException}
      * @param ex exception
      * @return возвращает результат работы метода {@link #mapAddStackTrace(Map, boolean, Exception)}
      * ({@link Map}<{@link String}, {@link String}>)
@@ -96,7 +101,7 @@ public class ApplicationExceptionHandler {
         return mapAddStackTrace(errorMap, debug, ex);
     }
 
-/*    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(ConstraintViolationException.class)
     public List<ErrorMessage> handleConstraintViolationException(ConstraintViolationException ex) {
         return ex.getConstraintViolations().stream()
@@ -104,5 +109,14 @@ public class ApplicationExceptionHandler {
                         violation.getPropertyPath().toString(),
                         violation.getMessage() + " (Вы указали: " + violation.getInvalidValue().toString() + ")"
                 )).collect(Collectors.toList());
-    }*/
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(IllegalArgumentException.class)
+    public Map<String,String> handleIllegalArgumentException(IllegalArgumentException ex) {
+        Map<String, String> errorMap = new HashMap<>();
+        errorMap.put("errorMessage", ex.getMessage());
+        errorMap.put("status", String.valueOf(HttpStatus.BAD_REQUEST));
+        return mapAddStackTrace(errorMap, debug, ex);
+    }
 }

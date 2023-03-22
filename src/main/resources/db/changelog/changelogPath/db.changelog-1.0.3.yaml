@@ -53,6 +53,12 @@ databaseChangeLog:
               - column:
                   constraints:
                     nullable: true
+                  name: last_login
+                  type: TIMESTAMP
+
+              - column:
+                  constraints:
+                    nullable: true
                   name: created
                   type: TIMESTAMP
                   defaultValue: ${now}
