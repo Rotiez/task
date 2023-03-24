@@ -30,7 +30,11 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
 
-
+    /**
+     * Метод для регистрауии
+     * @param request запрос на регистрауию {@link RegisterRequest}
+     * @return возвращает {@link AuthenticationResponse} с jwt
+     */
     public AuthenticationResponse register(RegisterRequest request) {
         List<Role> defaultRoles = new ArrayList<>();
         defaultRoles.add(roleRepository.findByName("ROLE_USER"));
@@ -53,6 +57,11 @@ public class AuthenticationService {
                 .build();
     }
 
+    /**
+     * Метод для аутентификации
+     * @param request запрос на аутентификацию {@link AuthenticationResponse}
+     * @return возвращает {@link AuthenticationResponse} с jwt
+     */
     public AuthenticationResponse authenticate(AuthenticationRequest request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
